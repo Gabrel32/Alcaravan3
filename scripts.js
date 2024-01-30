@@ -38,33 +38,27 @@ class Carrusel {
     CreateElementoCarrusel(reverse,repetir){
         this.fragment = document.createDocumentFragment()
         this.slideTrack = document.createElement("div")
-        this.setProperty(this.slideTrack)
         this.slideTrack.className = "slide-track"
         this.slideTrack.id = this.generarId()
+        this.setProperty(this.slideTrack,32)
+           if (reverse) {
+                    this.slideTrack.style.animation = `scroll2 40s linear infinite`
+                }
         for (let a = 0; a < repetir; a++) {
             this.Artefactos.forEach((e,i)=>{
-                let contenedorImg = document.createElement(`div`)
-                contenedorImg.id = `contenedorImg${i+1}`
-                contenedorImg.className = "slide"
-                if (reverse) {
-                    this.slideTrack.style.animation = `scroll2 40s linear infinite`
-
-                }else{
-                    this.slideTrack.style.animation = `scroll 40s linear infinite`
-
-                }
+                this.contenedorImg = document.createElement(`div`)
+                this.contenedorImg.id = `contenedorImg${i+1 + this.generarId()}`
+                this.contenedorImg.className = "slide"
                 let imagen = document.createElement("img")
                 imagen.src = `./img/${e.img}`
                 imagen.alt = `imagen ${e.img}`
                 imagen.title = `imagen del carrusel numero"${e.img}`
                 imagen.id = this.generarId()
-                contenedorImg.appendChild(imagen)
-                this.ctdImg.push(contenedorImg)
-                this.slideTrack.appendChild(contenedorImg)
-
-            })
-
-        }
+                this.contenedorImg.appendChild(imagen)
+                this.slideTrack.appendChild(this.contenedorImg)
+                this.ctdImg.push(imagen)
+              })
+            }
         this.clone.appendChild(this.slideTrack)
         this.fragment.appendChild(this.clone)
         this.contenedor.appendChild(this.fragment)
@@ -81,17 +75,24 @@ class Carrusel {
   }
     // agregando el drag and drop
 
-    setProperty(contenedor,suma = 0){
-        contenedor.style.setProperty("--scroll-distance", `${-250 * (16)}px`);
+    setProperty(contenedor = false,x = 0){
+        contenedor.style.width = `${250 * x}`
+        contenedor.style.setProperty("--scroll-distance", `${-250 * x / 2}px`);
     }
 
 
     addDragAndDrop() {
         this.ctdImg.forEach((img) => {
-          img.draggable = true;
-          img.addEventListener("dragstart", this.dragStart.bind(this));
-          this.slideTrack.addEventListener("dragover", this.dragOver.bind(this));
-          this.slideTrack.addEventListener("drop", this.drop.bind(this));
+          img.parentNode.draggable = true;
+          img.addEventListener("dragstart", event =>{
+            this.dragStart(event)
+          });
+          this.slideTrack.addEventListener("dragover", event=>{
+            this.dragOver(event)
+          });
+          this.slideTrack.addEventListener("drop", event=>{
+            this.drop(event)
+          });
         });
       }
     
@@ -108,24 +109,25 @@ class Carrusel {
         const elementoId = event.dataTransfer.getData("text/plain");
         const elemento = document.getElementById(elementoId);
         const carruselOrigen =  elemento.closest(".slide-track");
-        const carruselDestino = event.target.parentNode;
-    
+        const carruselDestino = event.currentTarget;
+        let cantidadElementosD = carruselDestino.querySelectorAll(".slide")
+        
+        
         if (carruselOrigen !== carruselDestino) {
-          carruselDestino.appendChild(elemento);
-          this.reordenarElementos(carruselDestino);
-          this.setProperty(carruselDestino,1)
-        }
+            carruselDestino.appendChild(elemento.parentElement);
+            this.setProperty( carruselDestino,cantidadElementosD.length + 1)
+            this.reordenarElementos(carruselDestino);            
+          }
         
       }
       reordenarElementos(contenedor) {
         const elementos = Array.from(contenedor.getElementsByClassName("slide"));
-      
         elementos.forEach((elemento, index) => {
             elemento.style.order = index + 1;
-            elemento.style.flex = "0 0 auto"; // Añade esta línea para utilizar flexbox
           });
       }
     }
+    
 
     // aggSortable(){
     //     this.contenedorSlideTrack.forEach(e=>{

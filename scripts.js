@@ -1,20 +1,19 @@
 const ubicaImg = [
-    {img:"1.jpeg"},
-    {img:"2.jpeg"},
-    {img:"3.jpeg"},
-    {img:"4.jpeg"},
-    {img:"5.jpeg"},
-    {img:"6.jpeg"},
-    {img:"7.jpeg"},
-    {img:"8.jpeg"},
-    {img:"9.jpeg"},
-    {img:"10.jpeg"},
-    {img:"11.jpeg"},
-    {img:"12.jpeg"},
-    {img:"13.jpeg"},
-    {img:"14.jpeg"},
-    {img:"15.jpeg"},
-    {img:"16.jpeg"}
+    {img:"1.jpeg",descripcion:"astronauta deadspace la ostia"},
+    {img:"2.jpeg",descripcion:"scaneo de rutina 2077"},
+    {img:"3.jpeg",descripcion:"caracas/petare 12:33pm 2077"},
+    {img:"4.jpeg",descripcion:"guarico/san juan 02:22am 2077"},
+    {img:"5.jpeg",descripcion:"SBR Chronos 2077"},
+    {img:"6.jpeg",descripcion:"Primera cita 2077"},
+    {img:"7.jpeg",descripcion:"eliminacion de malware pirata"},
+    {img:"8.jpeg",descripcion:"patriarcado 2077"},
+    {img:"9.jpeg",descripcion:"ojo bionico/modelo chronos 2077"},
+    {img:"10.jpeg",descripcion:"jonh wick 2077"},
+    {img:"11.jpeg",descripcion:"ella me dejo 2077"},
+    {img:"12.jpeg",descripcion:"yamaha chronos 2077"},
+    {img:"13.jpeg",descripcion:"aragua/maracay 01:33am 2077"},
+    {img:"14.jpeg",descripcion:"new game DeadSpace 20077"},
+    {img:"15.jpeg",descripcion:"michi 2077"},
 ]
 
 
@@ -47,13 +46,14 @@ class Carrusel {
         for (let a = 0; a < repetir; a++) {
             this.Artefactos.forEach((e,i)=>{
                 this.contenedorImg = document.createElement(`div`)
-                this.contenedorImg.id = `contenedorImg${i+1 + this.generarId()}`
+                this.contenedorImg.id = `contenedorImg${i+1}`
                 this.contenedorImg.className = "slide"
                 let imagen = document.createElement("img")
                 imagen.src = `./img/${e.img}`
                 imagen.alt = `imagen ${e.img}`
-                imagen.title = `imagen del carrusel numero"${e.img}`
+                imagen.title = e.descripcion
                 imagen.id = this.generarId()
+                imagen.className = i+1
                 this.contenedorImg.appendChild(imagen)
                 this.slideTrack.appendChild(this.contenedorImg)
                 this.ctdImg.push(imagen)
@@ -109,22 +109,27 @@ class Carrusel {
         const elementoId = event.dataTransfer.getData("text/plain");
         const elemento = document.getElementById(elementoId);
         const carruselOrigen =  elemento.closest(".slide-track");
+        let imagenes = carruselOrigen.getElementsByClassName(elemento.className)
         const carruselDestino = event.currentTarget;
         let cantidadElementosD = carruselDestino.querySelectorAll(".slide")
+        let cantidadElementosO = carruselOrigen.querySelectorAll(".slide")
+
         
-        
-        if (carruselOrigen !== carruselDestino) {
-            carruselDestino.appendChild(elemento.parentElement);
-            this.setProperty( carruselDestino,cantidadElementosD.length + 1)
-            this.reordenarElementos(carruselDestino);            
-          }
+        for (let i = 0; i < imagenes.length; i++) {
+          let imagen = imagenes[i];
+          if (carruselOrigen !== carruselDestino) {
+              carruselDestino.appendChild(imagen.parentElement);
+              this.setProperty(carruselDestino,cantidadElementosD.length + 2)
+              this.setProperty(carruselOrigen,cantidadElementosO.length - 2)
+            }
+        }
         
       }
-      reordenarElementos(contenedor) {
-        const elementos = Array.from(contenedor.getElementsByClassName("slide"));
-        elementos.forEach((elemento, index) => {
-            elemento.style.order = index + 1;
-          });
+      texto(){
+        this.tmp2 = document.querySelector("#tmp2")
+        this.clone2 = this.tmp2.content.firstElementChild.cloneNode(true)
+        this.contenedor.appendChild(this.clone2)
+
       }
     }
     
@@ -147,6 +152,7 @@ function init(Artefactos,reverse = false){
     const carrusel = new Carrusel("contenedor",Artefactos)
     carrusel.setClone(tmp)
     carrusel.createCarrusel(Artefactos)
+    carrusel.texto()
     carrusel.createCarrusel(Artefactos,true)
     // carrusel.aggSortable()
     

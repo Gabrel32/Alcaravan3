@@ -1,56 +1,63 @@
 :root {
-    --RojoOscuro: #8B0000;
+    --RosaFuerte: #ff00ff;
     --NegroProfundo: #090505;
-    --AzulEléctrico: #156b6b;
+    --AzulEléctrico: #00ffff;
     --RojoProfundo: #6e1414;
     --AzulNoche: #000080;
     --GrisOscuro: #190808;
     --AzulCobalto: #0047AB;
     --scroll-distance: (-250 * 16)px
 }
-/* *{
+*{
     padding: 0;
     margin: 0;
-    box-sizing: border-box;
-} */
-
-body{
-    background-image:url(/img/backgrond.jpeg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: top;
-    display: flex;justify-content: center;
-    min-height: 100dvh
 }
-
-.contenedor{
+h1, h2, h3 {
+    font-family: "Orbitron", sans-serif;
+    background: linear-gradient(to right,var(--RosaFuerte), var(--AzulEléctrico));
+    background-clip: text;
+    color: transparent;
+  }
+  
+  .contenedorH1 {
+    height: 101%;
+    width: 100%;
     display: flex;
-    /* justify-content: center; */
-    width: 80vw;
+    align-items: center;
+    gap: 20px;
+    @media (min-width:310px){
+        height: 93%;
+        position: absolute;
+    }
+}
+  
+  body {
+    background-image: url(./img/backgrond.jpeg);
+    background-size: cover;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-height: 100vh;
+    min-width: 100vw; 
+  }
+  
+  .contenedor {
+    display: flex;
+    width: 80%;
     mask: linear-gradient(90deg, transparent, white 25%, white 75%, transparent);
-    -webkit-mask: linear-gradient(
-      90deg,
-      transparent,
-      white 25%,
-      white 75%,
-      transparent
-    );
+    -webkit-mask: linear-gradient(90deg, transparent, white 25%, white 75%, transparent);
     overflow: hidden;
     margin: 2rem 0;
-}
+  }
 
 .slider {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: max-content;
     max-height: 50%;
     gap: 2rem;
     
-}
-.slide-track{
-    width: 100%;
-    height: 100%;
 }
 
 .slide-track {
@@ -58,16 +65,19 @@ body{
     animation: scroll 40s linear infinite;
     /* -webkit-animation: scroll 40s linear infinite; */
     width: calc(250px * 32);
-    max-height: 380px;
+    max-height: 340px;
+    padding: 10px;
     gap: 40px;
 }
 
 .slider .slide {
     width: 250px;
-    max-height: 400px;
+    max-height: 3400px;
+    
 }
 
 .slider .slide img {
+    box-shadow: 0 0 15px var(--AzulEléctrico);
     display: flex;
     width: 100%;
     height: 100%;

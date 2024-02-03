@@ -18,16 +18,15 @@ const ubicaImg = [
 
 
 class Carrusel {
-    constructor(contenedor,ubicaImg){
+    constructor(contenedor,ubicaImg,tmp){
         this.contenedor = document.querySelector(`.${contenedor}`)
         this.ubicaImg = ubicaImg
+        this.tmp = tmp
         this.clone = null
         this.ctdImg = []
         this.contenedorSlideTrack = []
         this.Artefactos = null
-    }
-    setClone(templade){
-        this.clone = templade.content.firstElementChild.cloneNode(true)
+        this.slider = document.querySelector(".slider")
     }
     createCarrusel(Artefactos,reverse = false){
         this.Artefactos = Artefactos
@@ -48,20 +47,19 @@ class Carrusel {
                 this.contenedorImg = document.createElement(`div`)
                 this.contenedorImg.id = `contenedorImg${i+1}`
                 this.contenedorImg.className = "slide"
-                let imagen = document.createElement("img")
-                imagen.src = `./img/${e.img}`
-                imagen.alt = `imagen ${e.img}`
-                imagen.title = e.descripcion
-                imagen.id = this.generarId()
-                imagen.className = i+1
-                this.contenedorImg.appendChild(imagen)
+                this.imagen = this.tmp.content.firstElementChild.cloneNode(true)
+                this.imagen.src = `./img/${e.img}`
+                this.imagen.alt = `imagen ${e.img}`
+                this.imagen.title = e.descripcion
+                this.imagen.id = this.generarId()
+                this.imagen.className = i+1
+                this.contenedorImg.appendChild(this.imagen)
                 this.slideTrack.appendChild(this.contenedorImg)
-                this.ctdImg.push(imagen)
+                this.ctdImg.push(this.imagen)
               })
             }
-        this.clone.appendChild(this.slideTrack)
-        this.fragment.appendChild(this.clone)
-        this.contenedor.appendChild(this.fragment)
+        this.fragment.appendChild(this.slideTrack)
+        this.slider.appendChild(this.fragment)
         this.contenedorSlideTrack.push(this.slideTrack)
         this.addDragAndDrop()
 
@@ -83,8 +81,8 @@ class Carrusel {
 
     addDragAndDrop() {
         this.ctdImg.forEach((img) => {
-          img.parentNode.draggable = true;
-          img.addEventListener("dragstart", event =>{
+          img.parentElement.draggable = true;
+          img.parentElement.addEventListener("dragstart", event =>{
             this.dragStart(event)
           });
           this.slideTrack.addEventListener("dragover", event=>{
@@ -125,18 +123,12 @@ class Carrusel {
         }
         
       }
-      texto(){
-        this.tmp2 = document.querySelector("#tmp2")
-        this.clone2 = this.tmp2.content.firstElementChild.cloneNode(true)
-        this.contenedor.appendChild(this.clone2)
-
-      }
     }
     
 
     // aggSortable(){
-    //     this.contenedorSlideTrack.forEach(e=>{
-    //         Sortable.create(e, {
+    //     this.contenedorSlideTrack.forEach(elemento=>{
+    //         Sortable.create(elemento, {
     //             animation: 150,
     //             group: "listGroup"
     //           });
@@ -149,10 +141,8 @@ class Carrusel {
 
 function init(Artefactos,reverse = false){
     const tmp = document.querySelector("#tmp")
-    const carrusel = new Carrusel("contenedor",Artefactos)
-    carrusel.setClone(tmp)
+    const carrusel = new Carrusel("contenedor",Artefactos,tmp)
     carrusel.createCarrusel(Artefactos)
-    carrusel.texto()
     carrusel.createCarrusel(Artefactos,true)
     // carrusel.aggSortable()
     
